@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Math 7 Placement Test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f6f4ef; --card:#ffffff; --ink:#1f2933; --muted:#5f6b76; --line:#e3ded4;
+    --accent:#2f6fb3; --accent-ink:#ffffff; --accent-soft:#e6eef8;
+    --good:#2e7d4f; --good-soft:#e5f4e9; --warn:#a05a00; --warn-soft:#fbefdc; --bad:#b3261e; --bad-soft:#fbe9e7;
+    --a:#7a5cc7; --b:#c2672b; --c:#2f6fb3;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:18px;line-height:1.5}
+  main{max-width:860px;margin:0 auto;padding:24px 16px 64px}
+  h1{font-size:1.7rem;margin:.2em 0 .3em;font-weight:800}
+  h2{font-size:1.3rem;margin:1.2em 0 .4em;font-weight:800}
+  h3{font-size:1.05rem;margin:1em 0 .3em;font-weight:800}
+  p{margin:.4em 0 .8em}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+  .muted{color:var(--muted)}
+  .small{font-size:.85rem}
+  label{font-weight:700;display:block;margin:.2em 0 .35em}
+  input[type=text]{font:inherit;font-size:1.1rem;padding:10px 12px;border:2px solid var(--line);border-radius:10px;width:100%;max-width:360px;background:#fff;color:var(--ink)}
+  input[type=text]:focus{outline:none;border-color:var(--accent)}
+  textarea{font:inherit;font-size:.85rem;width:100%;min-height:90px;padding:10px;border:2px solid var(--line);border-radius:10px;font-family:ui-monospace,Menlo,Consolas,monospace;word-break:break-all}
+  button{font:inherit;font-weight:700;border:0;border-radius:10px;padding:11px 20px;cursor:pointer;background:var(--accent);color:var(--accent-ink)}
+  button:hover{filter:brightness(1.07)}
+  button.secondary{background:var(--accent-soft);color:var(--accent)}
+  button.ghost{background:transparent;color:var(--muted);padding:8px 10px;text-decoration:underline}
+  button:disabled{opacity:.5;cursor:default}
+  .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+  .spacer{flex:1}
+  .topbar{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+  .badge{display:inline-block;font-size:.8rem;font-weight:800;padding:3px 10px;border-radius:999px;color:#fff}
+  .badge.A{background:var(--a)} .badge.B{background:var(--b)} .badge.C{background:var(--c)}
+  .progress{height:10px;background:var(--line);border-radius:999px;overflow:hidden;flex:1}
+  .progress > div{height:100%;background:var(--accent);transition:width .25s}
+  .qtext{font-size:1.25rem;font-weight:600;margin:.2em 0 1em}
+  .part{margin:0 0 18px}
+  .choices{display:grid;gap:8px}
+  .choice{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer;font-weight:600;background:#fff}
+  .choice input{width:20px;height:20px;accent-color:var(--accent)}
+  .choice:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+  .prefix{display:flex;align-items:center;gap:8px}
+  .prefix span{font-weight:800;font-size:1.1rem}
+  table{border-collapse:collapse;width:100%;font-size:.92rem}
+  th,td{border-bottom:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
+  th{font-weight:800;background:#faf8f3}
+  .mini{width:auto;margin:6px 0 10px;font-size:1rem}
+  .mini td,.mini th{border:1px solid var(--line);text-align:center;padding:4px 12px}
+  .pill{display:inline-block;font-size:.78rem;font-weight:800;padding:2px 9px;border-radius:999px}
+  .pill.good{background:var(--good-soft);color:var(--good)}
+  .pill.warn{background:var(--warn-soft);color:var(--warn)}
+  .pill.bad{background:var(--bad-soft);color:var(--bad)}
+  .pill.na{background:#eee;color:#666}
+  .placement{border-radius:14px;padding:18px 20px;background:var(--accent-soft);border:2px solid var(--accent);margin:12px 0 6px}
+  .placement .big{font-size:1.5rem;font-weight:800}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:12px 0}
+  .stat{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#fff}
+  .stat .n{font-size:1.5rem;font-weight:800}
+  .note{background:var(--warn-soft);border-radius:10px;padding:10px 14px;margin:10px 0;font-size:.95rem}
+  .ok{background:var(--good-soft);border-radius:10px;padding:10px 14px;margin:10px 0;font-size:.95rem}
+  .err{color:var(--bad);font-weight:700;min-height:1.4em}
+  ul{margin:.3em 0 .8em;padding-left:1.3em}
+  /* calculator */
+  .calc-toggle{position:fixed;right:18px;bottom:18px;z-index:5}
+  .calc{position:fixed;right:18px;bottom:76px;width:250px;background:#22303c;border-radius:16px;padding:12px;z-index:6;box-shadow:0 8px 28px rgba(0,0,0,.25)}
+  .calc .disp{background:#e8efe6;color:#111;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:1.3rem;text-align:right;padding:10px;border-radius:8px;margin-bottom:10px;min-height:2.2em;overflow:hidden;white-space:nowrap}
+  .calc .keys{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+  .calc .keys button{padding:10px 0;background:#3b4b59;color:#fff;font-size:1.05rem;border-radius:8px}
+  .calc .keys button.op{background:#5a7896}
+  .calc .keys button.eq{background:var(--accent)}
+  .hidden{display:none !important}
+  .tablewrap{overflow-x:auto}
+  .qdetail td:nth-child(3), .qdetail td:nth-child(4){font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.85rem}
+</style>
+</head>
+<body>
+<main id="app"></main>
+
+<button id="calcToggle" class="calc-toggle secondary hidden" type="button">Calculator</button>
+<div id="calc" class="calc hidden" aria-label="Four-function calculator">
+  <div class="disp" id="calcDisp">0</div>
+  <div class="keys" id="calcKeys"></div>
+</div>
+
+<script>
+"use strict";
+/* ============ Tutor settings ============ */
+const TUTOR_PIN = "2468";        // PIN to open the tutor report on a student's computer
+const PASS = {A:9, B:11};        // passing scores for Parts A and B
+const C_STRONG = 15, C_ADV = 17; // Part C cutoffs
+const STOP_AFTER = 4;            // stop rule: misses in a row within a part
+
+/* ============ Question bank ============ */
+const tbl = (rows) => '<table class="mini"><tr><th>x</th>'+rows[0].map(v=>'<td>'+v+'</td>').join('')+'</tr><tr><th>y</th>'+rows[1].map(v=>'<td>'+v+'</td>').join('')+'</tr></table>';
+const N = (a, extra={}) => Object.assign({t:'num', a}, extra);
+const CH = (label, opts, a, extra={}) => Object.assign({t:'choice', label, opts, a}, extra);
+
+const QUESTIONS = [
+  // ---------- Part A: Grade 5 ----------
+  {id:'A1',part:'A',skill:'Multiply decimals by powers of 10',text:'4.7 × 100 = ?',parts:[N(470)]},
+  {id:'A2',part:'A',skill:'Add decimals',text:'3.25 + 4.8 = ?',parts:[N(8.05)]},
+  {id:'A3',part:'A',skill:'Subtract decimals',text:'6.4 − 2.75 = ?',parts:[N(3.65)]},
+  {id:'A4',part:'A',skill:'Add unlike fractions',text:'2/3 + 1/4 = ?',parts:[N(11/12,{show:'11/12'})]},
+  {id:'A5',part:'A',skill:'Subtract mixed numbers',text:'3 1/2 − 1 3/4 = ?',parts:[N(1.75,{show:'1 3/4'})]},
+  {id:'A6',part:'A',skill:'Fraction × whole number',text:'2/5 × 15 = ?',parts:[N(6)]},
+  {id:'A7',part:'A',skill:'Divide by a unit fraction',text:'4 ÷ 1/3 = ?',parts:[N(12)]},
+  {id:'A8',part:'A',skill:'Divide decimals',text:'7.2 ÷ 0.8 = ?',parts:[N(9)]},
+  {id:'A9',part:'A',skill:'Order of operations',text:'20 − 3 × (4 + 2) = ?',parts:[N(2)]},
+  {id:'A10',part:'A',skill:'Compare decimals',text:'Which symbol makes this true?<br><b>0.45 ___ 0.405</b>',parts:[CH('Choose one:',['<  (less than)','>  (greater than)','=  (equal to)'],1,{show:'>'})]},
+  {id:'A11',part:'A',skill:'Volume of a rectangular prism',text:'A box is 5 cm long, 3 cm wide and 4 cm tall. What is its volume in cubic centimeters?',parts:[N(60,{show:'60 cm³'})]},
+  {id:'A12',part:'A',skill:'Fraction word problem',text:'A recipe uses 3/4 cup of sugar per batch. How many cups of sugar are needed for 6 batches?',parts:[N(4.5,{show:'4 1/2 cups'})]},
+  // ---------- Part B: Grade 6 ----------
+  {id:'B1',part:'B',skill:'Divide fractions',text:'2/3 ÷ 4/9 = ?',parts:[N(1.5,{show:'3/2 or 1 1/2'})]},
+  {id:'B2',part:'B',skill:'Multiply decimals',text:'3.6 × 0.25 = ?',parts:[N(0.9)]},
+  {id:'B3',part:'B',skill:'Long division',text:'156 ÷ 12 = ?',parts:[N(13)]},
+  {id:'B4',part:'B',skill:'Ratios',text:'A class has 12 boys and 18 girls. Write the ratio of boys to girls in simplest form.',parts:[{t:'ratio',a:[2,3],show:'2:3',hint:'Example format: 5:7'}]},
+  {id:'B5',part:'B',skill:'Unit rate',text:'3 pounds of grapes cost $4.50. What is the price per pound, in dollars?',parts:[N(1.5,{show:'$1.50'})]},
+  {id:'B6',part:'B',skill:'Percent of a number',text:'What is 30% of 80?',parts:[N(24)]},
+  {id:'B7',part:'B',skill:'Order integers',text:'Put these numbers in order from least to greatest:<br><b>−3, 2, −5, 0, 1</b>',parts:[{t:'list',a:[-5,-3,0,1,2],show:'−5, −3, 0, 1, 2',hint:'Type the numbers separated by commas. Use the minus key for negatives.'}]},
+  {id:'B8',part:'B',skill:'Absolute value',text:'Answer both parts.',parts:[N(7,{label:'(a) What is |−7|?'}),CH('(b) Which is farther from 0 on a number line?',['−7','4','They are the same distance'],0,{show:'−7'})]},
+  {id:'B9',part:'B',skill:'Evaluate expressions',text:'Evaluate 3x + 5 when x = 4.',parts:[N(17)]},
+  {id:'B10',part:'B',skill:'One-step equations',text:'Solve: x + 9 = 23',parts:[N(14,{prefix:'x =',show:'x = 14'})]},
+  {id:'B11',part:'B',skill:'One-step equations',text:'Solve: 5y = 45',parts:[N(9,{prefix:'y =',show:'y = 9'})]},
+  {id:'B12',part:'B',skill:'Area of a triangle',text:'Find the area, in square feet, of a triangle with a base of 10 ft and a height of 6 ft.',parts:[N(30,{show:'30 sq ft'})]},
+  {id:'B13',part:'B',skill:'Mean and median',text:'Data: <b>4, 8, 6, 10, 7</b>',parts:[N(7,{label:'(a) Mean'}),N(7,{label:'(b) Median'})]},
+  {id:'B14',part:'B',skill:'Write inequalities',text:'Write an inequality for: "At least 12 students must sign up for the trip." Use <b>s</b> for students.',parts:[{t:'ineq',op:'>=',v:12,show:'s ≥ 12',hint:'Type >= for "greater than or equal to" and <= for "less than or equal to".'}]},
+  {id:'B15',part:'B',skill:'Distributive property',text:'Write an expression equivalent to 3(x + 4) <b>without parentheses</b>.',parts:[{t:'expr',f:x=>3*x+12,noParens:true,show:'3x + 12'}]},
+  // ---------- Part C: Grade 7 ----------
+  {id:'C1',part:'C',topic:'1.1',std:'7.GR.1, 7.AT.2',text:'Table 1:'+tbl([[2,4,6],[5,10,15]])+'Table 2:'+tbl([[1,2,3],[4,6,8]]),
+    parts:[CH('(a) Which table shows a proportional relationship?',['Table 1','Table 2','Both','Neither'],0,{w:1,show:'Table 1'}),N(2.5,{label:'(b) What is its constant of proportionality, k?',w:1})]},
+  {id:'C2',part:'C',topic:'1.2',std:'7.AT.2, 7.AT.3',text:'A graph of the cost of apples passes through the points (0, 0) and (1, 3.5).',
+    parts:[{t:'expr',f:x=>3.5*x,label:'(a) Write an equation for cost y and pounds x.',prefix:'y =',show:'y = 3.5x',w:2},
+           CH('(b) What does the point (1, 3.5) mean?',['1 pound of apples costs $3.50','3.5 pounds of apples cost $1','The apples cost $1 more than $3.50','It is where the line starts'],0,{w:2})]},
+  {id:'C3',part:'C',topic:'1.3',std:'7.AT.1',text:'Maya walks 1/2 mile in 1/6 hour. What is her speed in miles per hour?',parts:[N(3,{w:3,show:'3 mph'})]},
+  {id:'C4',part:'C',topic:'1.4',std:'7.AT.4',text:'A $60 jacket is 25% off. Sales tax is 6%. What is the final price, in dollars?',parts:[N(47.7,{tol:0.006,w:4,show:'$47.70'})]},
+  {id:'C5',part:'C',topic:'1.4',std:'7.AT.4',text:'A ticket price rose from $40 to $50. What is the percent increase?',parts:[N(25,{w:4,show:'25%'})]},
+  {id:'C6',part:'C',topic:'1.5',std:'7.GR.1',text:'A map scale is 1 inch = 20 miles. Two towns are 3.5 inches apart on the map. How many miles apart are they?',parts:[N(70,{w:5,show:'70 miles'})]},
+  {id:'C7',part:'C',topic:'2.1',std:'7.NOS.1',text:'Find each answer.',parts:[N(-3,{label:'(a) −8 + 5',w:6}),N(10,{label:'(b) 4 − (−6)',w:6}),N(-6.2,{label:'(c) −2.5 − 3.7',w:6})]},
+  {id:'C8',part:'C',topic:'2.2',std:'7.NOS.2',text:'Find each answer.',parts:[N(24,{label:'(a) (−6)(−4)',w:7}),N(-1.5,{label:'(b) −3/4 ÷ 1/2',w:7,show:'−3/2'}),CH('(c) Write 2/9 as a decimal. Does it end or repeat?',['0.222…  — it repeats','0.29  — it ends','0.2  — it ends','0.2929…  — it repeats'],0,{w:7,show:'0.222…, repeats'})]},
+  {id:'C9',part:'C',topic:'2.3',std:'7.NOS.3',text:'At 6 p.m. it is 3°F. The temperature drops 2.5°F every hour. What is the temperature at 10 p.m., in °F?',parts:[N(-7,{w:8,show:'−7°F'})]},
+  {id:'C10',part:'C',topic:'2.4',std:'7.DS.4, 7.DS.5, 7.DS.6',text:'A bag holds 3 red, 5 blue and 2 green marbles.',parts:[N(0.5,{label:'(a) What is P(blue)?',w:9,show:'1/2',tol:0.001}),N(1/12,{label:'(b) You flip a coin and roll a number cube. What is P(heads and 6)?',w:9,show:'1/12',tol:0.001})]},
+  {id:'C11',part:'C',topic:'3.1',std:'7.AT.5, 7.NOS.1',text:'Answer both parts.',parts:[{t:'expr',f:x=>3*x-5,label:'(a) Simplify: 4(2x − 3) − 5x + 7',show:'3x − 5',w:10},{t:'expr',f:x=>6*x+15,factor:3,label:'(b) Factor completely: 6x + 15',show:'3(2x + 5)',w:10}]},
+  {id:'C12',part:'C',topic:'3.2',std:'7.NOS.3, 7.AT.8',text:'Jon has $20. He buys 3 notebooks that cost the same amount and has $8.75 left. Let n be the cost of one notebook.',parts:[CH('(a) Which equation fits?',['20 − 3n = 8.75','3n − 20 = 8.75','20 + 3n = 8.75','3 − 20n = 8.75'],0,{w:11}),N(3.75,{label:'(b) How much is each notebook, in dollars?',w:11,show:'$3.75'})]},
+  {id:'C13',part:'C',topic:'3.4',std:'7.AT.8',text:'Solve each equation.',parts:[N(9,{label:'(a) 3x − 7 = 20',prefix:'x =',w:12}),N(5,{label:'(b) 2(x + 4) = 18',prefix:'x =',w:12})]},
+  {id:'C14',part:'C',topic:'3.4',std:'7.AT.8, 7.NOS.3, 7.AT.6',text:'A phone plan costs $25 a month plus $0.10 per text.',parts:[N(75,{label:'(a) One bill was $32.50. How many texts were sent?',w:12}),N(1.05,{label:'(b) "Increase a price by 5%" is the same as multiplying it by what number?',w:12})]},
+  {id:'C15',part:'C',topic:'3.5',std:'7.AT.9',text:'Solve: −2x + 5 > 11',parts:[{t:'ineq',op:'<',v:-3,label:'(a) Solution',show:'x < −3',hint:'Example format: x > 4 or x <= 7',w:13},CH('(b) Which graph shows the solution?',['Open circle at −3, shaded to the left','Closed circle at −3, shaded to the left','Open circle at −3, shaded to the right','Closed circle at −3, shaded to the right'],0,{w:13})]},
+  {id:'C16',part:'C',topic:'3.5',std:'7.AT.7, 7.AT.9',text:'Kiara can spend <b>no more than</b> $50 on 4 shirts that cost the same amount. Let p be the price of one shirt.',parts:[CH('(a) Should this be modeled with an equation or an inequality?',['An equation','An inequality'],1,{w:13}),{t:'ineq',op:'<=',v:12.5,label:'(b) Write and solve it. Type your final answer for p.',show:'p ≤ 12.50',hint:'Example format: p >= 3',w:13}]},
+  {id:'C17',part:'C',topic:'4.1',std:'7.GR.2',text:'Think about slicing solid shapes.',parts:[CH('(a) A square pyramid is sliced parallel to its base. What shape is the cross section?',['Square','Triangle','Rectangle (not square)','Circle'],0,{w:14}),CH('(b) A cylinder is sliced straight down through its center. What shape is the cross section?',['Circle','Rectangle','Triangle','Oval'],1,{w:14})]},
+  {id:'C18',part:'C',topic:'4.2, 4.3',std:'7.GR.3, 7.GR.4',text:'Use 3.14 for π.',parts:[N(31.4,{label:'(a) A circle has a radius of 5 cm. Find its circumference (cm).',tol:0.11,w:15}),N(78.5,{label:'(b) Find the area of that circle (cm²).',tol:0.2,w:15}),N(282.6,{label:'(c) A cylinder has a radius of 3 in and a height of 10 in. Find its volume (in³).',tol:0.8,w:16})]},
+  {id:'C19',part:'C',topic:'4.4, 4.5',std:'7.DS.1, 7.DS.2, 7.DS.3',text:'Answer both parts.',parts:[CH('(a) To learn students\' favorite sport, Ben surveys fans at a basketball game. Is this a fair sample?',['No — basketball fans are more likely to pick basketball','Yes — any group of students works','Yes — it is a big crowd','No — the game is too loud'],0,{w:17}),N(120,{label:'(b) In a random sample, 12 of 60 students walk to school. The school has 600 students. About how many walk?',w:18})]},
+];
+const PART_INFO = {
+  A:{name:'Part A: Grade 5 Foundations', calc:false, n:12, intro:'12 questions. No calculator. Use scratch paper to show your work.'},
+  B:{name:'Part B: Grade 6 Readiness', calc:false, n:15, intro:'15 questions. No calculator. Use scratch paper to show your work.'},
+  C:{name:'Part C: Grade 7 Course Content', calc:true, n:19, intro:'19 questions. You may use the calculator button at the bottom right. Some of these topics you may not have learned yet. That is okay. Try your best, or choose "I don\'t know yet."'},
+};
+const WEEKS = {1:'Topic 1.1 Identifying Proportional Relationships',2:'Topic 1.2 Representing Proportional Relationships',3:'Topic 1.3 Unit Rate',4:'Topic 1.4 Ratio and Percent Problems',5:'Topic 1.5 Scale Drawings',6:'Topic 2.1 Adding & Subtracting Rational Numbers',7:'Topic 2.2 Multiplying & Dividing Rational Numbers',8:'Topic 2.3 Problem Solving with Rational Numbers',9:'Topic 2.4 Probability',10:'Topic 3.1 Writing Equivalent Expressions',11:'Topic 3.2 Representing Situations with Equations',12:'Topic 3.4 Problem Solving with Equations',13:'Topic 3.5 Inequalities',14:'Topic 4.1 Solid Geometry',15:'Topic 4.2 Circles',16:'Topic 4.3 Cylinders, Cones and Spheres',17:'Topic 4.4 Sampling',18:'Topic 4.5 Using Samples'};
+
+/* ============ Math parsing (no eval) ============ */
+function norm(s){return String(s==null?'':s).replace(/[−–—]/g,'-').replace(/[×·]/g,'*').replace(/÷/g,'/');}
+function parseNum(raw){
+  let s = norm(raw).replace(/…|\.{2,}/g,'').replace(/[$%°]/g,'').replace(/,/g,'').replace(/[a-zA-Z³²]+/g,' ').replace(/^\s*=\s*/,'').replace(/\s+/g,' ').trim();
+  s = s.replace(/^=\s*/,'');
+  let m;
+  if((m = s.match(/^(-)?\s*(\d+) (\d+)\s*\/\s*(\d+)$/))){const v=+m[2]+(+m[3])/(+m[4]); return m[1]?-v:v;}
+  if((m = s.match(/^(-?\s*\d*\.?\d+)\s*\/\s*(-?\s*\d*\.?\d+)$/))){const b=parseFloat(m[2].replace(/\s/g,'')); if(b===0) return null; return parseFloat(m[1].replace(/\s/g,''))/b;}
+  if(/^-?\s*(\d+\.?\d*|\.\d+)$/.test(s)) return parseFloat(s.replace(/\s/g,''));
+  return null;
+}
+// tiny recursive-descent parser for + - * / ( ) numbers and x
+function evalExpr(src, x){
+  let s = src, i = 0;
+  const peek = () => s[i];
+  function num(){ let j=i; while(i<s.length && /[0-9.]/.test(s[i])) i++; if(j===i) throw 0; const v=parseFloat(s.slice(j,i)); if(isNaN(v)) throw 0; return v; }
+  function factor(){
+    const c = peek();
+    if(c==='-'){i++; return -factor();}
+    if(c==='+'){i++; return factor();}
+    if(c==='('){i++; const v=expr(); if(peek()!==')') throw 0; i++; return v;}
+    if(c==='x'){ if(x===undefined) throw 0; i++; return x; }
+    return num();
+  }
+  function term(){ let v=factor(); while(peek()==='*'||peek()==='/'){ const o=s[i++]; const r=factor(); v = o==='*'? v*r : v/r; } return v; }
+  function expr(){ let v=term(); while(peek()==='+'||peek()==='-'){ const o=s[i++]; const r=term(); v = o==='+'? v+r : v-r; } return v; }
+  const v = expr(); if(i!==s.length) throw 0; return v;
+}
+function cleanExpr(raw){
+  let e = norm(raw).toLowerCase().replace(/\s+/g,'').replace(/^y=/,'');
+  if(!/^[0-9x+\-*/().]+$/.test(e)) return null;
+  return e;
+}
+function implicitMul(e){ return e.replace(/([0-9x)])(?=[x(])/g,'$1*'); }
+function checkExpr(p, raw){
+  const e = cleanExpr(raw); if(!e) return false;
+  if(p.noParens && /[()]/.test(e)) return false;
+  if(p.factor){ const m = e.match(/^(\d+)\*?\((.+)\)$/); if(!m || +m[1]!==p.factor) return false; }
+  const js = implicitMul(e);
+  try{ for(const x of [1.7,-2.3,3.1,0.5]){ const v=evalExpr(js,x); if(!isFinite(v) || Math.abs(v-p.f(x))>1e-6) return false; } return true; }
+  catch(_){ return false; }
+}
+function parseIneq(raw){
+  let s = norm(raw).toLowerCase().replace(/≥|=>/g,'>=').replace(/≤|=</g,'<=').replace(/\s+/g,'').replace(/\$/g,'');
+  let m = s.match(/^([a-z])(<=|>=|<|>)(.+)$/);
+  if(m) return {op:m[2], v:parseNum(m[3])};
+  m = s.match(/^(.+?)(<=|>=|<|>)([a-z])$/);
+  if(m){ const flip={'<':'>','>':'<','<=':'>=','>=':'<='}; return {op:flip[m[2]], v:parseNum(m[1])}; }
+  return null;
+}
+function gradePart(p, raw){
+  if(raw==null || String(raw).trim()==='') return false;
+  switch(p.t){
+    case 'num': { const v=parseNum(raw); return v!==null && Math.abs(v-p.a) <= (p.tol ?? 1e-6); }
+    case 'choice': return Number(raw)===p.a;
+    case 'expr': return checkExpr(p, raw);
+    case 'ineq': { const r=parseIneq(raw); return !!r && r.v!==null && r.op===p.op && Math.abs(r.v-p.v)<1e-6; }
+    case 'list': { const vals = norm(raw).split(/[,;]+|\s+/).filter(Boolean).map(parseNum); return vals.length===p.a.length && vals.every((v,k)=>v!==null && Math.abs(v-p.a[k])<1e-9); }
+    case 'ratio': { const s = norm(raw).toLowerCase().replace(/\s*to\s*/,':').replace('/',':').replace(/\s+/g,''); const m=s.match(/^(\d+):(\d+)$/); return !!m && +m[1]===p.a[0] && +m[2]===p.a[1]; }
+  }
+  return false;
+}
+function correctText(p){
+  if(p.show) return p.show;
+  if(p.t==='choice') return p.opts[p.a];
+  if(p.t==='num') return String(p.a);
+  return '';
+}
+function studentText(p, raw){
+  if(raw==null || String(raw).trim()==='') return '—';
+  if(p.t==='choice') return p.opts[Number(raw)] ?? '—';
+  return String(raw);
+}
+
+/* ============ Scoring and placement ============ */
+function scoreRecord(rec){
+  const res = {byQ:{}, totals:{A:0,B:0,C:0}, attempted:{A:0,B:0,C:0}};
+  for(const q of QUESTIONS){
+    const ans = rec.answers[q.id];
+    const attempted = ans !== undefined;
+    const partsOk = q.parts.map((p,k)=> attempted ? gradePart(p, ans[k]) : false);
+    const nOk = partsOk.filter(Boolean).length;
+    let pts = 0;
+    if(nOk===q.parts.length) pts = 1; else if(q.parts.length>1 && nOk >= q.parts.length/2) pts = 0.5;
+    res.byQ[q.id] = {attempted, partsOk, pts};
+    res.totals[q.part] += pts;
+    if(attempted) res.attempted[q.part]++;
+  }
+  const {A,B,C} = res.totals;
+  let level, start, detail;
+  if(A < PASS.A){ level='Grade 5 level'; start='Bridge Week F1'; detail='Start with Bridge Weeks F1–F4 (Grade 5), then G1–G5 (Grade 6), then Math 7 Week 1.'; }
+  else if(B < PASS.B){ level='Grade 6 level'; start='Bridge Week G1'; detail='Start with Bridge Weeks G1–G5 (Grade 6), then Math 7 Week 1.'; }
+  else if(C >= C_ADV){ level='Ready for Grade 8 content'; start='Review missed topics'; detail='Review any topics marked "Teach full week" below, then preview Math 8: slope, linear functions and systems.'; }
+  else if(C >= C_STRONG){ level='Grade 7, strong'; start='First week marked "Teach full week"'; detail='Teach only the weeks marked "Teach full week" below; give the others as one-session checks.'; }
+  else { level='Grade 7 level (on grade)'; start='Week 1'; detail='Start Math 7 at Week 1. Shorten the weeks marked "Shorten" to one session.'; }
+  // week status from Part C
+  const weeks = {};
+  for(let w=1; w<=18; w++) weeks[w] = {tested:false, ok:true};
+  for(const q of QUESTIONS.filter(q=>q.part==='C')){
+    const r = res.byQ[q.id];
+    q.parts.forEach((p,k)=>{ if(!p.w) return; const W=weeks[p.w]; if(r.attempted){ W.tested=true; if(!r.partsOk[k]) W.ok=false; } else { W.ok=false; } });
+  }
+  const firstTeach = Object.keys(weeks).map(Number).find(w=>!(weeks[w].tested && weeks[w].ok));
+  if(level.startsWith('Grade 7') && firstTeach) start = 'Week '+firstTeach+' ('+WEEKS[firstTeach]+')';
+  if(level.startsWith('Grade 7, strong') && !firstTeach) start='All weeks shortened';
+  // flags
+  const flags = [];
+  const anyWrong = ids => ids.some(id => res.byQ[id].pts < 1);
+  if(anyWrong(['C7','C8','C9']) && res.attempted.C>0) flags.push('Signs with negative numbers (C7–C9): plan extra time in Weeks 6–8.');
+  if(anyWrong(['A4','A5','A6','A7','B1'])) flags.push('Fractions (A4–A7, B1): fractions may be a root gap. Use Bridge Week F2 even if he passed Part A.');
+  if(rec.stoppedPart) flags.push('The test stopped early in Part '+rec.stoppedPart+' after '+STOP_AFTER+' misses in a row. Questions after that were not given and count as 0.');
+  return Object.assign(res, {level, start, detail, weeks, flags});
+}
+
+/* ============ Results code (to send to the tutor) ============ */
+function encodeRecord(rec){
+  const compact = {v:1,n:rec.name,d:rec.date,s:rec.startedAt,e:rec.endedAt,sp:rec.stoppedPart||null,a:rec.answers};
+  return 'M7P-' + btoa(unescape(encodeURIComponent(JSON.stringify(compact))));
+}
+function decodeRecord(code){
+  const s = String(code||'').trim().replace(/^M7P-/,'').replace(/\s+/g,'');
+  const o = JSON.parse(decodeURIComponent(escape(atob(s))));
+  if(!o || o.v!==1 || typeof o.a!=='object') throw new Error('bad');
+  return {name:String(o.n||''),date:String(o.d||''),startedAt:o.s,endedAt:o.e,stoppedPart:o.sp||null,answers:o.a};
+}
+
+/* ============ State ============ */
+const LS_KEY = 'm7p_state_v1';
+let state = null; // {name,date,startedAt,idx,answers,streak,stoppedPart,phase:'intro'|'q'|'done', introPart}
+function save(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(state)); }catch(_){} }
+function load(){ try{ const s=localStorage.getItem(LS_KEY); return s?JSON.parse(s):null; }catch(_){ return null; } }
+function clearSaved(){ try{ localStorage.removeItem(LS_KEY); }catch(_){} }
+
+/* ============ Platform capabilities (optional) ============ */
+let DB = null, USER = null, isOwner = false;
+(async ()=>{
+  try{ if(window.claude && claude.use){ USER = await claude.use('user'); isOwner = !!(USER && USER.isOwner && await USER.isOwner()); DB = await claude.use('db'); } }catch(_){ DB=null; }
+  if(currentView==='start') render();
+})();
+async function saveToDb(rec, sc){
+  if(!DB) return false;
+  try{
+    await DB.collection('results').add({
+      name: rec.name, date: rec.date, finishedAt: rec.endedAt || new Date().toISOString(),
+      scoreA: sc.totals.A, scoreB: sc.totals.B, scoreC: sc.totals.C, placement: sc.level, code: encodeRecord(rec)
+    });
+    return true;
+  }catch(_){ return false; }
+}
+
+/* ============ Rendering helpers ============ */
+const app = document.getElementById('app');
+let currentView = 'start';
+const esc = s => String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function el(html){ app.innerHTML = html; window.scrollTo(0,0); }
+function showCalc(on){ document.getElementById('calcToggle').classList.toggle('hidden', !on); if(!on) document.getElementById('calc').classList.add('hidden'); }
+
+/* ---------- Start ---------- */
+function renderStart(){
+  currentView='start'; showCalc(false);
+  const saved = load();
+  const resume = saved && saved.phase && saved.phase!=='done' ? saved : null;
+  el(`
+  <div class="card">
+    <h1>Math 7 Placement Test</h1>
+    <p>This test helps your tutor find the right place to start. It has three parts and 46 questions, and takes about 75 minutes. You can take a break between parts.</p>
+    <ul>
+      <li>Answer one question at a time. You will not see if you were right. Your tutor gets the results.</li>
+      <li>Use scratch paper. Type fractions with a slash, like <b>3/4</b>, and mixed numbers with a space, like <b>2 1/2</b>.</li>
+      <li>If you have not learned something yet, choose <b>I don't know yet</b>. That is okay.</li>
+    </ul>
+    ${resume ? `<div class="ok">A test for <b>${esc(resume.name)}</b> is in progress on this computer.</div>
+      <div class="row"><button id="resumeBtn">Resume test</button><button class="secondary" id="restartBtn">Start a new test</button></div>`
+    : `<label for="nm">Your first and last name</label>
+      <input type="text" id="nm" autocomplete="name" maxlength="60">
+      <div class="err" id="err"></div>
+      <button id="startBtn">Start the test</button>`}
+  </div>
+  <p class="row" style="margin-top:14px"><span class="spacer"></span><button class="ghost" id="tutorBtn">Tutor: view results</button></p>`);
+  if(resume){
+    document.getElementById('resumeBtn').onclick = ()=>{ state=resume; route(); };
+    document.getElementById('restartBtn').onclick = ()=>{ clearSaved(); renderStart(); };
+  } else {
+    const go = ()=>{
+      const name = document.getElementById('nm').value.trim();
+      if(!name){ document.getElementById('err').textContent='Please type your name to begin.'; return; }
+      state = {name, date:new Date().toLocaleDateString(), startedAt:new Date().toISOString(), idx:0, answers:{}, streak:0, stoppedPart:null, phase:'intro', introPart:'A'};
+      save(); route();
+    };
+    document.getElementById('startBtn').onclick = go;
+    document.getElementById('nm').addEventListener('keydown', e=>{ if(e.key==='Enter') go(); });
+    document.getElementById('nm').focus();
+  }
+  document.getElementById('tutorBtn').onclick = ()=> isOwner ? renderTutorHome() : renderPin(()=>renderTutorHome());
+}
+
+function route(){
+  if(state.phase==='intro') return renderPartIntro(state.introPart);
+  if(state.phase==='q') return renderQuestion();
+  if(state.phase==='done') return renderDone();
+}
+
+/* ---------- Part intro ---------- */
+function renderPartIntro(part){
+  currentView='test'; showCalc(false);
+  const info = PART_INFO[part];
+  el(`<div class="card">
+    <span class="badge ${part}">Part ${part}</span>
+    <h1>${info.name}</h1>
+    <p>${info.intro}</p>
+    <button id="goBtn">Begin Part ${part}</button>
+  </div>`);
+  document.getElementById('goBtn').onclick = ()=>{ state.phase='q'; state.streak=0; save(); renderQuestion(); };
+}
+
+/* ---------- Question ---------- */
+function renderQuestion(){
+  currentView='test';
+  const q = QUESTIONS[state.idx];
+  showCalc(PART_INFO[q.part].calc);
+  const n = state.idx+1, total = QUESTIONS.length;
+  const prev = state.answers[q.id] || [];
+  const partsHtml = q.parts.map((p,k)=>{
+    const id = 'p'+k;
+    const label = p.label ? `<label for="${id}">${p.label}</label>` : '';
+    if(p.t==='choice'){
+      return `<div class="part"><label>${p.label||'Choose one:'}</label><div class="choices">`+
+        p.opts.map((o,j)=>`<label class="choice"><input type="radio" name="${id}" value="${j}" ${String(prev[k])===String(j)?'checked':''}> ${esc(o)}</label>`).join('')+`</div></div>`;
+    }
+    const input = `<input type="text" id="${id}" autocomplete="off" inputmode="text" value="${esc(prev[k]??'')}">`;
+    return `<div class="part">${label}${p.prefix?`<div class="prefix"><span>${p.prefix}</span>${input}</div>`:input}${p.hint?`<div class="muted small">${p.hint}</div>`:''}</div>`;
+  }).join('');
+  el(`<div class="topbar"><span class="badge ${q.part}">Part ${q.part}</span><div class="progress"><div style="width:${(state.idx/total*100).toFixed(1)}%"></div></div><span class="muted small">${n} of ${total}</span></div>
+  <div class="card">
+    <div class="muted small">Question ${q.id}</div>
+    <div class="qtext">${q.text}</div>
+    ${partsHtml}
+    <div class="err" id="err"></div>
+    <div class="row"><button id="nextBtn">${state.idx===total-1?'Finish':'Next'}</button><span class="spacer"></span><button class="secondary" id="skipBtn">I don't know yet</button></div>
+  </div>
+  <p class="muted small" style="margin-top:12px">Your answers are saved as you go. If the page closes, open it again and choose Resume.</p>`);
+  const first = app.querySelector('input[type=text]'); if(first) first.focus();
+  app.querySelectorAll('input[type=text]').forEach(inp=>inp.addEventListener('keydown',e=>{ if(e.key==='Enter') submit(false); }));
+  document.getElementById('nextBtn').onclick = ()=>submit(false);
+  document.getElementById('skipBtn').onclick = ()=>submit(true);
+
+  function submit(skip){
+    const vals = q.parts.map((p,k)=>{
+      if(skip) return '';
+      if(p.t==='choice'){ const c = app.querySelector(`input[name=p${k}]:checked`); return c?c.value:''; }
+      return document.getElementById('p'+k).value.trim();
+    });
+    if(!skip && vals.every(v=>v==='')){ document.getElementById('err').textContent='Type an answer, or choose "I don\'t know yet."'; return; }
+    if(!skip && vals.some(v=>v==='')){
+      const e = document.getElementById('err');
+      if(!e.dataset.warned){ e.textContent='One part is still blank. Press the button again to go on anyway.'; e.dataset.warned='1'; return; }
+    }
+    state.answers[q.id] = vals;
+    // stop rule
+    const ok = q.parts.map((p,k)=>gradePart(p, vals[k])).filter(Boolean).length;
+    const pts = ok===q.parts.length ? 1 : (q.parts.length>1 && ok>=q.parts.length/2 ? 0.5 : 0);
+    state.streak = pts===0 ? state.streak+1 : 0;
+    if(state.streak >= STOP_AFTER){ state.stoppedPart = q.part; return finish(); }
+    state.idx++;
+    if(state.idx >= QUESTIONS.length) return finish();
+    const nextPart = QUESTIONS[state.idx].part;
+    if(nextPart !== q.part){ state.phase='intro'; state.introPart=nextPart; save(); return renderPartIntro(nextPart); }
+    save(); renderQuestion();
+  }
+}
+
+async function finish(){
+  state.phase='done'; state.endedAt=new Date().toISOString(); save();
+  renderDone();
+  const sc = scoreRecord(state);
+  if(!state.savedToDb && DB){ const ok = await saveToDb(state, sc); if(ok){ state.savedToDb = true; save(); if(currentView==='done') renderDone(); } }
+}
+
+/* ---------- Done (student) ---------- */
+function renderDone(){
+  currentView='done'; showCalc(false);
+  const code = encodeRecord(state);
+  el(`<div class="card">
+    <h1>You're done, ${esc(state.name.split(' ')[0])}!</h1>
+    <p>Great work. Your tutor will go over the results with you.</p>
+    ${state.savedToDb ? `<div class="ok">Your results were saved for your tutor.</div>` : ''}
+    <h2>Send this code to your tutor</h2>
+    <p class="muted">Copy the code and paste it into a text or email to your tutor. It holds your answers.</p>
+    <textarea id="code" readonly>${esc(code)}</textarea>
+    <div class="row" style="margin-top:10px"><button id="copyBtn">Copy code</button><span id="copied" class="muted"></span></div>
+  </div>
+  <p class="row" style="margin-top:14px"><button class="ghost" id="newBtn">Start a new test</button><span class="spacer"></span><button class="ghost" id="tutorBtn">Tutor: view report</button></p>`);
+  document.getElementById('copyBtn').onclick = async ()=>{
+    const t = document.getElementById('code'); t.select();
+    try{ await navigator.clipboard.writeText(code); document.getElementById('copied').textContent='Copied!'; }
+    catch(_){ document.getElementById('copied').textContent='Press Ctrl+C (or ⌘+C) to copy the selected code.'; }
+  };
+  document.getElementById('tutorBtn').onclick = ()=>{ const rec = state; const open=()=>renderReport(rec, ()=>renderDone()); isOwner?open():renderPin(open, ()=>renderDone()); };
+  document.getElementById('newBtn').onclick = ()=> renderPin(()=>{ clearSaved(); state=null; renderStart(); }, ()=>renderDone(), 'Enter the tutor PIN to clear this test and start a new one.');
+}
+
+/* ---------- PIN ---------- */
+function renderPin(onOk, onBack, msg){
+  currentView='pin'; showCalc(false);
+  el(`<div class="card">
+    <h1>Tutor access</h1>
+    <p>${msg||'Enter the tutor PIN to see results.'}</p>
+    <input type="text" id="pin" inputmode="numeric" autocomplete="off" style="max-width:180px;-webkit-text-security:disc">
+    <div class="err" id="err"></div>
+    <div class="row"><button id="okBtn">Continue</button><button class="secondary" id="backBtn">Back</button></div>
+  </div>`);
+  const go = ()=>{ if(document.getElementById('pin').value.trim()===TUTOR_PIN) onOk(); else document.getElementById('err').textContent='That PIN is not right.'; };
+  document.getElementById('okBtn').onclick = go;
+  document.getElementById('pin').addEventListener('keydown', e=>{ if(e.key==='Enter') go(); });
+  document.getElementById('backBtn').onclick = ()=> onBack ? onBack() : renderStart();
+  document.getElementById('pin').focus();
+}
+
+/* ---------- Tutor home ---------- */
+let unsubResults = null, savedResults = null, resultsNote = '';
+function renderTutorHome(){
+  currentView='tutor'; showCalc(false);
+  el(`<div class="card">
+    <h1>Tutor: results</h1>
+    <h2>Open a results code</h2>
+    <p class="muted">Paste the code your student sent you.</p>
+    <textarea id="codeIn" placeholder="M7P-..."></textarea>
+    <div class="err" id="err"></div>
+    <button id="openBtn">Show report</button>
+    <div id="savedBox"></div>
+  </div>
+  <p style="margin-top:14px"><button class="ghost" id="backBtn">Back to the test</button></p>`);
+  document.getElementById('openBtn').onclick = ()=>{
+    try{ const rec = decodeRecord(document.getElementById('codeIn').value); renderReport(rec, renderTutorHome); }
+    catch(_){ document.getElementById('err').textContent='That code could not be read. Check that the whole code was copied.'; }
+  };
+  document.getElementById('backBtn').onclick = ()=> renderStart();
+  renderSavedList();
+  if(DB && !unsubResults){
+    resultsNote = 'Loading saved results…';
+    const timer = setTimeout(()=>{ if(savedResults===null){ resultsNote='Saved results could not be reached right now.'; renderSavedList(); } }, 10000);
+    try{
+      unsubResults = DB.collection('results').orderBy('finishedAt','desc').limit(100).onSnapshot(snap=>{
+        if(!snap.metadata.fromCache) clearTimeout(timer);
+        savedResults = snap.docs.map(d=>Object.assign({id:d.id}, d.data())); resultsNote=''; renderSavedList();
+      }, ()=>{ clearTimeout(timer); resultsNote='Saved results are not available here.'; savedResults=[]; renderSavedList(); });
+    }catch(_){ clearTimeout(timer); }
+  }
+}
+function renderSavedList(){
+  const box = document.getElementById('savedBox'); if(!box) return;
+  if(!DB){ box.innerHTML=''; return; }
+  let h = '<h2>Saved results</h2>';
+  if(resultsNote) h += `<p class="muted">${esc(resultsNote)}</p>`;
+  if(savedResults && savedResults.length===0 && !resultsNote) h += '<p class="muted">No saved results yet. Results save here when the test is taken while signed in to your Claude account. Otherwise, use the code above.</p>';
+  if(savedResults && savedResults.length){
+    h += '<div class="tablewrap"><table><tr><th>Student</th><th>Finished</th><th>A</th><th>B</th><th>C</th><th>Placement</th><th></th></tr>'+
+      savedResults.map((r,i)=>`<tr><td>${esc(r.name||'')}</td><td>${r.finishedAt?esc(new Date(r.finishedAt).toLocaleString()):''}</td><td>${r.scoreA??''}/12</td><td>${r.scoreB??''}/15</td><td>${r.scoreC??''}/19</td><td>${esc(r.placement||'')}</td><td><button class="secondary" data-i="${i}">Open</button></td></tr>`).join('')+'</table></div>';
+  }
+  box.innerHTML = h;
+  box.querySelectorAll('button[data-i]').forEach(b=>b.onclick=()=>{ try{ renderReport(decodeRecord(savedResults[+b.dataset.i].code), renderTutorHome); }catch(_){} });
+}
+
+/* ---------- Report ---------- */
+function pill(pts, attempted){
+  if(!attempted) return '<span class="pill na">Not given</span>';
+  if(pts===1) return '<span class="pill good">1</span>';
+  if(pts===0.5) return '<span class="pill warn">0.5</span>';
+  return '<span class="pill bad">0</span>';
+}
+function renderReport(rec, onBack){
+  currentView='report'; showCalc(false);
+  const sc = scoreRecord(rec);
+  const mins = rec.startedAt && rec.endedAt ? Math.round((new Date(rec.endedAt)-new Date(rec.startedAt))/60000) : null;
+  const passed = (p)=> p==='C' ? (sc.totals.C>=C_STRONG?'Strong':'—') : (sc.totals[p]>=PASS[p]?'Passed':'Not passed');
+  const weekRows = Object.keys(WEEKS).map(Number).map(w=>{
+    const W = sc.weeks[w]; let s;
+    if(!W.tested) s='<span class="pill na">Not tested — teach</span>';
+    else if(W.ok) s='<span class="pill good">Shorten to 1 session</span>';
+    else s='<span class="pill bad">Teach full week</span>';
+    return `<tr><td>Week ${w}</td><td>${WEEKS[w]}</td><td>${s}</td></tr>`;
+  }).join('');
+  const detailRows = QUESTIONS.map(q=>{
+    const r = sc.byQ[q.id]; const ans = rec.answers[q.id] || [];
+    const stu = q.parts.map((p,k)=> (q.parts.length>1?`(${String.fromCharCode(97+k)}) `:'') + esc(r.attempted?studentText(p, ans[k]):'—') + (r.attempted ? (r.partsOk[k]?' ✓':' ✗') : '')).join('<br>');
+    const cor = q.parts.map((p,k)=> (q.parts.length>1?`(${String.fromCharCode(97+k)}) `:'') + esc(correctText(p))).join('<br>');
+    const what = q.part==='C' ? `Topic ${q.topic} · ${q.std}` : esc(q.skill);
+    return `<tr><td><b>${q.id}</b></td><td>${what}</td><td>${stu}</td><td>${cor}</td><td>${pill(r.pts, r.attempted)}</td></tr>`;
+  }).join('');
+
+  el(`<div class="card">
+    <div class="row"><h1 style="margin:0">Placement report</h1><span class="spacer"></span><button class="secondary" id="backBtn">Back</button></div>
+    <p class="muted">${esc(rec.name)} · ${esc(rec.date)}${mins!==null?` · ${mins} minutes`:''}</p>
+    <div class="placement"><div class="muted small">Placement</div><div class="big">${sc.level}</div><div><b>Start at:</b> ${esc(sc.start)}</div><div>${sc.detail}</div></div>
+    <div class="stats">
+      <div class="stat"><div class="muted small">Part A · Grade 5</div><div class="n">${sc.totals.A} / 12</div><div class="small">Pass: ${PASS.A} · ${passed('A')}</div></div>
+      <div class="stat"><div class="muted small">Part B · Grade 6</div><div class="n">${sc.totals.B} / 15</div><div class="small">Pass: ${PASS.B} · ${passed('B')}</div></div>
+      <div class="stat"><div class="muted small">Part C · Grade 7</div><div class="n">${sc.totals.C} / 19</div><div class="small">Strong: ${C_STRONG}+ · Grade 8-ready: ${C_ADV}+</div></div>
+    </div>
+    ${sc.flags.length?`<h3>What to look for</h3><ul>${sc.flags.map(f=>`<li>${esc(f)}</li>`).join('')}</ul>`:''}
+    <p class="muted small">It is mid-year, so missing most of Units 3 and 4 in Part C is normal and is not a reason to place below Grade 7.</p>
+    <div class="row"><button id="copyRep">Copy report as text</button><span id="copied" class="muted"></span></div>
+
+    <h2>Math 7 weeks: teach or shorten</h2>
+    <p class="muted small">Based on the Part C question for each topic.</p>
+    <div class="tablewrap"><table><tr><th>Week</th><th>Topic</th><th>Plan</th></tr>${weekRows}</table></div>
+
+    <h2>Every question</h2>
+    <div class="tablewrap"><table class="qdetail"><tr><th>#</th><th>Skill / Topic</th><th>Student answer</th><th>Correct answer</th><th>Points</th></tr>${detailRows}</table></div>
+  </div>`);
+  document.getElementById('backBtn').onclick = onBack || renderStart;
+  document.getElementById('copyRep').onclick = async ()=>{
+    const txt = reportText(rec, sc, mins);
+    try{ await navigator.clipboard.writeText(txt); document.getElementById('copied').textContent='Copied!'; }
+    catch(_){ document.getElementById('copied').textContent='Copy is blocked here. Select the text on the page instead.'; }
+  };
+}
+function reportText(rec, sc, mins){
+  const L = [];
+  L.push('Math 7 Placement Report');
+  L.push(`${rec.name} · ${rec.date}${mins!==null?` · ${mins} minutes`:''}`);
+  L.push('');
+  L.push(`Placement: ${sc.level}`);
+  L.push(`Start at: ${sc.start}`);
+  L.push(sc.detail);
+  L.push('');
+  L.push(`Part A (Grade 5): ${sc.totals.A}/12 (pass ${PASS.A})`);
+  L.push(`Part B (Grade 6): ${sc.totals.B}/15 (pass ${PASS.B})`);
+  L.push(`Part C (Grade 7): ${sc.totals.C}/19 (strong ${C_STRONG}+, Grade 8-ready ${C_ADV}+)`);
+  if(sc.flags.length){ L.push(''); L.push('What to look for:'); sc.flags.forEach(f=>L.push('- '+f)); }
+  L.push(''); L.push('Math 7 weeks:');
+  Object.keys(WEEKS).map(Number).forEach(w=>{ const W=sc.weeks[w]; L.push(`Week ${w} ${WEEKS[w]}: ${!W.tested?'Not tested - teach':W.ok?'Shorten to 1 session':'Teach full week'}`); });
+  L.push(''); L.push('Missed or partial questions:');
+  QUESTIONS.forEach(q=>{ const r=sc.byQ[q.id]; if(r.pts<1){ const ans=rec.answers[q.id]||[]; L.push(`${q.id}: ${r.attempted?q.parts.map((p,k)=>studentText(p,ans[k])).join(' | '):'not given'}  (correct: ${q.parts.map(correctText).join(' | ')})`); } });
+  return L.join('\n');
+}
+
+function render(){ if(currentView==='start') renderStart(); }
+
+/* ============ Calculator ============ */
+(function(){
+  const keys = ['7','8','9','÷','4','5','6','×','1','2','3','−','0','.','=','+','C','±','√','%'];
+  const box = document.getElementById('calcKeys'), disp = document.getElementById('calcDisp');
+  let expr = '';
+  const show = v => { disp.textContent = v===''?'0':v; };
+  function evaluate(){ try{ const v = evalExpr(norm(expr).replace(/\s+/g,'')); if(!isFinite(v)) return 'Error'; return String(+v.toFixed(10)); }catch(_){ return 'Error'; } }
+  keys.forEach(k=>{
+    const b = document.createElement('button'); b.type='button'; b.textContent=k;
+    if('÷×−+'.includes(k)) b.className='op'; if(k==='=') b.className='eq';
+    b.onclick = ()=>{
+      if(k==='C'){ expr=''; }
+      else if(k==='='){ expr = evaluate(); if(expr==='Error'){ show('Error'); expr=''; return; } }
+      else if(k==='√'){ const v=evaluate(); if(v==='Error'||+v<0){ show('Error'); expr=''; return; } expr=String(+Math.sqrt(+v).toFixed(10)); }
+      else if(k==='%'){ const v=evaluate(); if(v==='Error'){ show('Error'); expr=''; return; } expr=String(+(+v/100).toFixed(10)); }
+      else if(k==='±'){ const v=evaluate(); if(v==='Error'){ return; } expr=String(-(+v)); }
+      else { expr += k; }
+      show(expr);
+    };
+    box.appendChild(b);
+  });
+  document.getElementById('calcToggle').onclick = ()=> document.getElementById('calc').classList.toggle('hidden');
+})();
+
+renderStart();
+</script>
+</body>
+</html>
